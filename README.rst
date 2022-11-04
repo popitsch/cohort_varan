@@ -144,7 +144,7 @@ This is a python pipeline for extracting pedigree specific data from annotated V
 * Pedigree data (PED files)
 * GADO data 
 * Exomiser data
-* Additional gene annotations (TSV file with 
+* Additional gene annotations (TSV file)
 * GREEN_DB regulatory regions
 * Gencode gene annotations
 
@@ -173,7 +173,7 @@ Additional processing steps/processing details:
                -1 for all affected samples that inherit a call,
                +1 for all affected samples containing a HET call with high GQ that was not inherited from mum&dad,
                0 for all other samples
-        - NOTE that for missing data (including calls with low GQ) we assume that GT that supports the respective inheritance model independent of each other which may lead to the situation that different genotypes for the alleles are assumed per inh model.
+        - NOTE that for missing data (including calls with low GQ) we assume that GT that supports the respective inheritance model independent of each other which may lead to the situation that different genotypes for the alleles are assumed per inheritance model.
 
 Example call
 ------------
