@@ -16,6 +16,7 @@ Cohort_varan consists of two python pipelines for the comprehensive annotation o
 and sets of VCF files (annotate_cohort).
 
 Overall usage scenario for cohort analyses:
+
 * Annotate small (SNV and INDEL) and large (SV) VCF files with annotate_vcf
 * Extract data per pedigree and integrate with various datasources with annotate_cohort
 * Preprocess data with `Variant Explorer R script <https://github.com/edg1983/Variant_explorer/blob/master/preprocessing/Prepare_Rdata_object.R>`_
@@ -30,9 +31,11 @@ Briefly, the pipeline consists of the following steps:
 
 * Links to VCF files are read from a sample sheet and iteratively processed. 
 * VCF files are pre-filtered to
+
     - remove non-PASS variants (unless the 'includeNonPass' option is set)
     - contain only variants for the passed chromosomes
 * VCF files are preprocessed in a variant-caller specific manner:
+
     - platypus VCF files: files are sorted with vcf-sort
     - deepvariant/gatk VCF files: entries in the ID column are moved to an info field
 * VCF files are annotated with snpEFF
@@ -80,8 +83,9 @@ JSON file with the following structure (cf. example below):
 
 * ``prefix``: in this section, variables can be defined that will be replaced throughout the remaining config file. 
 
-  Example: "prefix" : { "@REF": "/path_prefix" } 
+    - Example: "prefix" : { "@REF": "/path_prefix" } 
 * ``ref``: reference genome definitions. The contained section names must match the entries in the sample sheet. subsections: 
+
     - FASTA (reference genomme fasta file)
     - snpEff (snpEff annotation db version)
     - chr (list of considered chromosome names
@@ -89,15 +93,18 @@ JSON file with the following structure (cf. example below):
 * ``roi``: regions of interest annotation BED files. Must have subsections for each configured reference genome.
 * ``af``: population allele frequency VCF files.  Must have subsections for each configured reference genome and beyond this 2 subsections "global" (global AF annotations) and "pop" (population specific AF annotations). Each entry has 2 parts: VCF file and comma-separated list of info fields to be loaded from these vcf files
 * ``anno``: general annotation files. Must have subsections for each configured reference genome. Each entry has multiple parts, depending on file type:
+
    - BED files: [file_path]
    - VCF files: [file_path, comma-separated_list_of_info_field_names,comma-separated_list_of_summarization_methods see vcfanno docs; if omitted, 'self' will be used)]                                
    - TSV files: [file_path,comma-separated_list_of_column_indices,comma-separated_list_of_variable_names (if omitted, the TSV column names will be used), comma-separated_list_of_summarization_methods (see vcfanno docs; if omitted, 'self' will be used)]
 * ``known``: VCF files with 'known' variants.  Must have subsections for each configured reference genome. The respective IDs will be written to the annotated VCF ID section. It is possible to configure a prefix string for these IDs
 * ``output``: List of output fields for the created TSV file. There must be a 'fields' section containing list entries with a column name and an optional operator: 
+
     - 'max': split by comma, replace '.' values with nan (will be ignored) and select maximum value
     - 'min': split by comma, replace '.' values with nan (will be ignored) and select minimum value
     - none: use value as is.
 * ``tools``: Optional section for providing custom paths for the following 3rd party tools:
+
     - vcf-sort
     - snpSift
     - snpEff
@@ -107,10 +114,11 @@ JSON file with the following structure (cf. example below):
 * ``linux_temp_dir``: optional, for configuring an alternative TEMP dir. 
     
 
-Example JSON config file:
+Example JSON config file
+------------------------
 
-.. include:: annotate_vcf.example_config.json
-   :literal: 
+`<annotate_vcf.example_config.json>`_
+
 
 This file configures a single reference genome (GRCh38) and uses snpEff database 'GRCh38.99'. Only 2 chromosomes and unfiltered variants with a quality >= 10 will be included.Regions of interest will be read from a BED file and the respective path will be prefixed by the configured "@REF" prefix. Global and population-specific allele frequencies will be read from the configured info fields ('AF' and 'AF_EUR') in the configured VCF files. CADD scores (raw and phred-scaled) will be read from columne 5 and 6 in the provided TSV file. The resulting fields will be named 'CADD_RawScore' and 'CADD_PhredScore'. If multiple values are provided (comma-separated values), the maximum value will be chosen. Constrained region scores will be read from a BED file, SpliceAI SNP scores will be read from the 'SpliceAI_max' and 'SpliceAI_DP' info fields from the configured VCF file. For SpliceAI_max, the maximum value will be chosen if multiple values are provided. For SpliceAI_DP the values will simply be copied as is. ClinVar IDs, prefixed by the strng 'CV' will be added from the configured VCF file. The cretaed TSV file will contain the configured data columns (and additional standard columns such as position,ref allele, etc.). If multiple values are detected in a comma-separated list then the maximum value will be chosen (except for SpliceAI_SNP_SpliceAI_DP).
 
@@ -190,8 +198,10 @@ JSON file with the following structure (cf. example below):
 * ``so_term`` : SO terms and associated deleteriousness scores and association scores/types. Used for calculation of most severe consequence
 
 
-.. include:: annotate_cohort.example_config.json
-   :literal: 
+Example JSON config file
+------------------------
+
+`<annotate_cohort.example_config.json>`_
 
 
 Output files
