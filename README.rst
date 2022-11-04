@@ -22,6 +22,17 @@ Overall usage scenario for cohort analyses:
 * Preprocess data with `Variant Explorer R script <https://github.com/edg1983/Variant_explorer/blob/master/preprocessing/Prepare_Rdata_object.R>`_
 * Load and analyse data with `Variant Explorer <https://github.com/edg1983/Variant_explorer>`_
  
+
+Installation
+============
+
+* install python 3.6+ and clone this repository
+* install the following 3rd party tools
+
+    - `htslib <http://www.htslib.org/>`_
+    - `SnpEff and SnpSift <http://pcingola.github.io/SnpEff/>`_
+    - `vcfanno <https://github.com/brentp/vcfanno>`_
+    - `vcftools <https://vcftools.github.io/index.html>`_ (for vcf-sort support; only used for platypus VCF files)
  
 annotate_vcf
 ============
