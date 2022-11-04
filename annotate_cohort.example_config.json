@@ -1,0 +1,255 @@
+{
+	"dataset_name": "cohort_mini",
+	"input_data": {
+		"pedigrees":		["003Neo001", "007Cra003"],
+		"snv_vcf":		"snv.cohort_mini.GRCh38.anno+fil.vcf.gz",
+		"cnv_vcf":		"cnv.cohort_mini.GRCh38.anno+fil.vcf.gz",
+		"ped_pattern":		"PED/{id}.ped",
+		"gado_pattern":		"GADO_HPO/{id}.txt",
+		"exomiser_pattern":	"Exomiser/{id}_WGS_ALL_{IM}.genes.tsv.col12",
+		"alias_table":		"alias/alias2official_simple.tsv",
+		"gene_anno_table":	"gene_annotations/gene_anno.tsv.gz",
+		"reg_db":		"RegulatoryRegions/GRCh38_regions.annotated.tsv.gz",
+		"gene_gff":		"gene_annotations/gencode.v32.annotation.sorted.gff3.gz",
+		"chunksize":		10000
+	},
+	"filters": {
+		"max_pop_af":		0.02,
+		"min_dscore":		0,
+		"min_gq":			10,
+		"min_gq_dnm":		20,
+		"snv_reg_id_info_field": "Reg_id",
+		"cnv_reg_id_info_field": "Reg_id",
+		"include_na_models":	true
+	},
+	"output_fields": {
+		"included_info_fields": [
+			"CADD_PhredScore", "CADD_RawScore", "DANN_score", "CCR_pct", "Reg_constraint"
+		],
+		"included_info_factors": [
+		],
+		"included_info_flags": [
+			"LowMappability", "LowComplexity", "SegDup", "RefSeqReg", "DNase", "TFBS", "PanelApp", "TopVariableGenes", "UCNE"
+		]
+	},
+        "d_score_calc": {
+                "noncoding": {
+                        "fields": ["CADD_PhredScore", "DANN_score", "LinSight", "ReMM_score"],
+                        "norm":   [35,1,1,1],
+                        "summarisation": "mean"
+                },
+                "splicing": {
+                        "fields": ["SpliceAI_INDEL_SpliceAI_max", "SpliceAI_SNP_SpliceAI_max"],
+                        "norm":   [1,1],
+                        "summarisation": "max"
+                },
+                "utr": {
+                        "fields": ["score_noncoding"],
+                        "norm":   [1],
+                        "summarisation": "max"
+                },
+                "intron": {
+                        "fields": ["score_noncoding", "score_splicing"],
+                        "norm":   [1,1],
+                        "summarisation": "max"
+                },
+                "max_pop_af_snv": {
+                        "fields": ["global_A1000G_AF", "global_ExAC_AF", "global_UK10K_AF", "global_gnomAD_AF"],
+                        "norm": [1,1,1,1],
+                        "summarisation": "max"
+                },
+                "max_pop_af_cnv": {
+                        "fields": ["IMH_AF", "1000G_AF", "gnomAD_AF"],
+                        "norm": [1,1,1],
+                        "summarisation": "max"
+                }
+        },
+	"def_a_score": {
+		"exon":				1.0,
+		"splicing":			1.0,
+		"intron":			1.0,
+		"utr":				1.0,
+		"ENCODE-HMM":		0.5,
+		"EPD6":				0.5,
+		"EnsemblRegBuild":	0.5,
+		"FANTOM5":			0.5,
+		"FOCS":				0.5,
+		"FulcoEtAl2019":	0.5,
+		"HACER":			0.5,
+		"JungEtAl2019":		0.5,
+		"RefSeqRegBuild":	0.5,
+		"SegWey":			0.5,
+		"VISTA":			0.5,
+		"default":			0.01
+	},
+	"so_term": {
+		"transcript_ablation": { 
+			"d_score": 1.00, 
+			"a_score": 1.00, 
+			"a_type": "exon",
+			"so_id": "SO:0001893",
+			"descr": "A feature ablation whereby the deleted region includes a transcript feature"},
+		"splice_acceptor_variant": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "splicing",
+			"so_id": "SO:0001574",
+			"descr": "A splice variant that changes the 2 base region at the 3' end of an intron"},
+		"splice_donor_variant": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "splicing",
+			"so_id": "SO:0001575",
+			"descr": "A splice variant that changes the 2 base region at the 5' end of an intron"},
+		"stop_gained": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001587",
+			"descr": "A sequence variant whereby at least one base of a codon is changed, resulting in a premature stop codon, leading to a shortened transcript"},
+		"frameshift_variant": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001589",
+			"descr": "A sequence variant which causes a disruption of the translational reading frame, because the number of nucleotides inserted or deleted is not a multiple of three"},
+		"stop_lost": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001578",
+			"descr": "A sequence variant where at least one base of the terminator codon (stop) is changed, resulting in an elongated transcript"},
+		"start_lost": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0002012",
+			"descr": "A codon variant that changes at least one base of the canonical start codon"},
+		"transcript_amplification": {
+			"d_score": 1.00,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001889",
+			"descr": "A feature amplification of a region containing a transcript"},
+		"inframe_insertion": {
+			"d_score": 0.90,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001821",
+			"descr": "An inframe non synonymous variant that inserts bases into in the coding sequence"},
+		"inframe_deletion": {
+			"d_score": 0.90,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001822",
+			"descr": "An inframe non synonymous variant that deletes bases from the coding sequence"},
+		"missense_variant": {
+			"d_score": 0.90,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001583",
+			"descr": "A sequence variant, that changes one or more bases, resulting in a different amino acid sequence but where the length is preserved"},
+		"protein_altering_variant": {
+			"d_score": 0.90,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001818",
+			"descr": "A sequence_variant which is predicted to change the protein encoded in the coding sequence"},
+		"splice_region_variant": {
+			"d_score": 0,
+			"a_score": 1.00,
+			"a_type": "splicing",
+			"so_id": "SO:0001630",
+			"descr": "A sequence variant in which a change has occurred within the region of the splice site, either within 1-3 bases of the exon or 3-8 bases of the intron"},
+		"incomplete_terminal_codon_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001626",
+			"descr": "A sequence variant where at least one base of the final codon of an incompletely annotated transcript is changed"},
+		"start_retained_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0002019",
+			"descr": "A sequence variant where at least one base in the start codon is changed, but the start remains"},
+		"stop_retained_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001567",
+			"descr": "A sequence variant where at least one base in the terminator codon is changed, but the terminator remains"},
+		"synonymous_variant": {
+			"d_score": 0,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001819",
+			"descr": "A sequence variant where there is no resulting change to the encoded amino acid"},
+		"coding_sequence_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001580",
+			"descr": "A sequence variant that changes the coding sequence"},
+		"mature_miRNA_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001620",
+			"descr": "A transcript variant located with the sequence of the mature miRNA"},
+		"5_prime_UTR_variant": {
+			"d_score": 0.30,
+			"a_score": 1.00,
+			"a_type": "utr",
+			"so_id": "SO:0001623",
+			"descr": "A UTR variant of the 5' UTR"},
+		"3_prime_UTR_variant": {
+			"d_score": 0.30,
+			"a_score": 1.00,
+			"a_type": "utr",
+			"so_id": "SO:0001624",
+			"descr": "A UTR variant of the 3' UTR"},
+		"non_coding_transcript_exon_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001792",
+			"descr": "A sequence variant that changes non-coding exon sequence in a non-coding transcript"},
+		"intron_variant": {
+			"d_score": 0.00,
+			"a_score": 1.00,
+			"a_type": "intron",
+			"so_id": "SO:0001627",
+			"descr": "A transcript variant occurring within an intron"},
+		"NMD_transcript_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001621",
+			"descr": "A variant in a transcript that is the target of NMD"},
+		"non_coding_transcript_variant": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "SO:0001619",
+			"descr": "A transcript variant of a non coding RNA gene"},
+		"exonic_sv": {
+			"d_score": 0.50,
+			"a_score": 1.00,
+			"a_type": "exon",
+			"so_id": "NA",
+			"descr": "A SV overlapping an exonic region"},
+		"utr_sv": {
+			"d_score": 0.30,
+			"a_score": 1.00,
+			"a_type": "utr",
+			"so_id": "NA",
+			"descr": "A SV overlapping an exonic region"},
+		"intronic_sv": {
+			"d_score": 0.10,
+			"a_score": 1.00,
+			"a_type": "intron",
+			"so_id": "NA",
+			"descr": "A SV overlapping an exonic region"}
+	}
+}

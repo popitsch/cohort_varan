@@ -1,0 +1,51 @@
+{
+	"prefix" : {
+		"@REF": "<path_prefix>"
+	},
+	"ref": {
+		"GRCh38": {
+			"FASTA":  "<path_to>/genomes/GRCh38/GCA_000001405.15_GRCh38_full_plus_hs38d1_analysis_set.fna",
+			"snpEff": "GRCh38.99",
+			"chr": ["chr1", "chr2"],
+			"filter": "( QUAL >= 10 )"
+			}
+        },
+	"roi": {
+		"GRCh38": {
+			"PanelApp":         "@REF/PanelApp/GRCh38_PanelApp.sorted.bed.gz"
+		}
+	},
+	"af": {
+		"GRCh38": {
+			"global": {
+				"gnomAD":       ["@REF/gnomAD/GRCh38_gnomad.genomes.r3.sites.vcf.gz", "AF"]
+                        },
+                        "pop": {
+                                "UK10K":        ["@REF/UK10K/GRCh38_UK10K.vcf.gz", "AF_EUR"]
+                        }
+		}
+	},
+	"anno": {
+		"GRCh38": {
+			"CADD":   ["@REF/CADD/GRCh38_CADD.tsv.gz", "5,6", "RawScore,PhredScore", "max,max"],
+			"CCR_pct":  ["@REF/ConstrainedCodingRegions/GRCh38_CCRS.final.bed.gz"],
+			"SpliceAI_SNP": ["@REF/spliceAI/GRCh38_spliceAI.SNP.vcf.gz", "SpliceAI_max,SpliceAI_DP", "max,self"]
+		}
+	},
+	"known": {
+		"GRCh38": {
+			"ClinVar":          ["@REF/ClinVar/GRCh38_ClinVar.vcf.gz","CV"]
+		}
+	},
+	"output": {
+		"fields": [ [ "CADD_PhredScore", "max" ],
+			    [ "CADD_RawScore", "max" ], 
+			    [ "CCR_pct", "max" ], 
+			    [ "SpliceAI_SNP_SpliceAI_max", "max" ],
+			    [ "SpliceAI_SNP_SpliceAI_DP", "self" ]
+			 ]
+	},
+	"tools": {	
+		"vcfanno": "vcfanno_linux64"
+	}
+}
