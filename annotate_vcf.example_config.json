@@ -46,6 +46,8 @@
 			 ]
 	},
 	"tools": {	
-		"vcfanno": "vcfanno_linux64"
+		"vcfanno": "vcfanno_linux64",
+		"snpSift": "java -Xmx8g $SOFTWARE/snpEff/latest/SnpSift.jar",
+		"snpEff": "java -Xmx8g $SOFTWARE/snpEff/latest/SnpSift.jar"
 	}
 }
